@@ -5,22 +5,27 @@ import com.project.asset_Management_System.model.AssetType;
 import com.project.asset_Management_System.repository.AssetTypeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AssetTypeServiceImpl {
+public class AssetTypeServiceImpl implements AssetTypeService{
     @Autowired
     AssetTypeRepository assetTypeRepository;
 
+    @Override
     public List<AssetType> getAllAssetTypes() {
         return assetTypeRepository.findAll();
     }
 
-    public AssetType getAssetTypeById(int id) {
-        return assetTypeRepository.findById(id).get();
+    @Override
+    public ResponseEntity<AssetType> getAssetTypeById(int id) {
+         assetTypeRepository.findById(id).get();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //    @Transactional
@@ -32,6 +37,7 @@ public class AssetTypeServiceImpl {
 //    }
 
     @Transactional
+    @Override
     public AssetType createAssetType(List<AssetType> assetTypes) {
         for(AssetType assetType : assetTypes) {
             if(assetType.getStatus() == null){
@@ -43,6 +49,7 @@ public class AssetTypeServiceImpl {
     }
 
 
+    @Override
     public AssetType updateAssetType(AssetType assetType, int id) {
         Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
         if (existingAssetType.isPresent()) {
@@ -54,6 +61,7 @@ public class AssetTypeServiceImpl {
         }
     }
 
+    @Override
     public AssetType deleteAssetType(int id) {
         Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
         if (existingAssetType.isPresent()) {

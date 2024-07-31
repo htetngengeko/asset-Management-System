@@ -3,6 +3,7 @@ package com.project.asset_Management_System.controller;
 import com.project.asset_Management_System.model.AssetType;
 import com.project.asset_Management_System.service.AssetTypeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +19,9 @@ public class AssetTypeController {
     }
 
     @GetMapping("/asset-types/{id}")
-    public AssetType getAssetTypeById(@PathVariable int id) {
-        return assetTypeServiceImpl.getAssetTypeById(id);
+    public ResponseEntity<AssetType> getAssetTypeById(@PathVariable int id) {
+        assetTypeServiceImpl.getAssetTypeById(id);
+        return null;
     }
 
     @PostMapping("/asset-types")
