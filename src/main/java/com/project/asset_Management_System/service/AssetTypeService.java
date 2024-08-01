@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface AssetTypeService {
     List<AssetType> getAllAssetTypes();
+
     ResponseEntity<AssetType> getAssetTypeById(int id);
+
     @Transactional
     ResponseEntity<AssetType> createAssetTypes(List<AssetType> assetTypes);
 
-    @Transactional
-    AssetType createAssetType(List<AssetType> assetTypes);
+    ResponseEntity<AssetType> updateAssetType(List<AssetType>assetTypes, int id);
 
-    ResponseEntity<Asset> updateAssetType(AssetType assetType, int id);
     void deleteAssetType(int id);
 }

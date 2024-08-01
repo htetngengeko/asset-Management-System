@@ -2,6 +2,7 @@ package com.project.asset_Management_System.controller;
 
 import com.project.asset_Management_System.model.AssetType;
 import com.project.asset_Management_System.service.AssetTypeServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,23 +21,22 @@ public class AssetTypeController {
 
     @GetMapping("/asset-types/{id}")
     public ResponseEntity<AssetType> getAssetTypeById(@PathVariable int id) {
-        assetTypeServiceImpl.getAssetTypeById(id);
-        return null;
+        return assetTypeServiceImpl.getAssetTypeById(id);
     }
 
     @PostMapping("/asset-types")
-    public AssetType createAssetType(@RequestBody List<AssetType> assetType) {
-        return assetTypeServiceImpl.createAssetType(assetType);
+    public ResponseEntity<AssetType> createAssetType(@Valid @RequestBody List<AssetType> assetType) {
+        return assetTypeServiceImpl.createAssetTypes(assetType);
     }
 
     @PutMapping("/asset-types/{id}")
-    public AssetType updateAssetType(@RequestBody AssetType assetType, @PathVariable int id) {
-        return assetTypeServiceImpl.updateAssetType(assetType, id);
+    public ResponseEntity<AssetType> updateAssetType(@Valid @RequestBody List<AssetType> assetTypes, @PathVariable int id) {
+        return assetTypeServiceImpl.updateAssetType(assetTypes, id);
     }
 
     @DeleteMapping("/asset-types/{id}")
-    public AssetType deleteAssetType(@PathVariable int id) {
-        return assetTypeServiceImpl.deleteAssetType(id);
+    public void deleteAssetType(@PathVariable int id) {
+         assetTypeServiceImpl.deleteAssetType(id);
     }
 
 }

@@ -38,38 +38,39 @@ public class AssetTypeServiceImpl implements AssetTypeService{
 
     @Transactional
     @Override
-    public AssetType createAssetType(List<AssetType> assetTypes) {
+    public ResponseEntity<AssetType> createAssetTypes(List<AssetType> assetTypes) {
         for(AssetType assetType : assetTypes) {
             if(assetType.getStatus() == null){
                 assetType.setStatus(Status.AVAILABLE);
+                assetTypeRepository.save(assetType);
             }
-            return assetTypeRepository.save(assetType);
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
     @Override
-    public AssetType updateAssetType(AssetType assetType, int id) {
-        Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
-        if (existingAssetType.isPresent()) {
-            AssetType originalAssetType = existingAssetType.get();
-            originalAssetType.setName(assetType.getName());
-            return assetTypeRepository.save(originalAssetType);
-        }else {
-            return null;
+    public ResponseEntity<AssetType> updateAssetType(List<AssetType> assetTypes, int id) {
+        for(AssetType assetType : assetTypes) {
+            Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
+            if (existingAssetType.isPresent()) {
+                AssetType originalAssetType = existingAssetType.get();
+                originalAssetType.setName(assetType.getName());
+                assetTypeRepository.save(originalAssetType);
+            }
         }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public AssetType deleteAssetType(int id) {
+    public void deleteAssetType(int id) {
         Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
         if (existingAssetType.isPresent()) {
             AssetType originalAssetType = existingAssetType.get();
             originalAssetType.setStatus(Status.UNAVAILABLE);
-            return assetTypeRepository.save(originalAssetType);
-        }else {
-            return null;
+            assetTypeRepository.save(originalAssetType);
         }
+
     }
 }

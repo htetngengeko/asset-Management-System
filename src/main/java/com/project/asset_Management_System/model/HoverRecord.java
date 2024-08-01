@@ -3,6 +3,7 @@ package com.project.asset_Management_System.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.asset_Management_System.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -15,10 +16,16 @@ public class HoverRecord {
     @ManyToOne
     @JoinColumn(name = "asset_id", nullable = false)
     @JsonProperty("asset_id")
+    @NotNull (message = "Asset can't be null")
     private Asset asset;
 
+    @NotNull(message = "Date can't be null")
     private LocalDate hoverDate;
+
+    @NotNull(message = "Previous owner name can't be null")
     private String previousOwner;
+
+    @NotNull(message = "New owner name can't be null")
     private String newOwner;
 
     @Enumerated(EnumType.STRING)

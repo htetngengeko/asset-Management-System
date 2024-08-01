@@ -3,6 +3,8 @@ package com.project.asset_Management_System.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.asset_Management_System.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.context.annotation.Bean;
 
 @Entity
 public class Asset {
@@ -13,9 +15,13 @@ public class Asset {
     @ManyToOne
     @JoinColumn(name = "asset_type_id", nullable = false)
     @JsonProperty("asset_type_id")
+    @NotNull(message = "Asset type can't be null")
     private AssetType assetType;
 
+    @NotNull(message = "Serial Number can't be null")
     private String serial_number;
+
+    @NotNull(message = "Name can't be null")
     private String name;
 
     @Enumerated(EnumType.STRING)

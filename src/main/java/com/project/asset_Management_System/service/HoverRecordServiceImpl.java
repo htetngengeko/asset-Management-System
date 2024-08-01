@@ -14,20 +14,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class HoverRecordServiceImpl {
+public class HoverRecordServiceImpl implements HoverRecordService {
     @Autowired
     HoverRecordRepository hoverRecordRepository;
     @Autowired
     private AssetRepository assetRepository;
 
+    @Override
     public List<HoverRecord> getAllHoverRecords(){
         return hoverRecordRepository.findAll();
     }
 
-    public HoverRecord getHoverRecordById(int id){
-        return hoverRecordRepository.findById(id).get();
+    @Override
+    public ResponseEntity<HoverRecord> getHoverRecordById(int id){
+        hoverRecordRepository.findById(id).get();
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
+    @Override
     public ResponseEntity<HoverRecord> createHoverRecord(List<HoverRecord> hoverRecords){
         for(HoverRecord hoverRecord : hoverRecords) {
             if(hoverRecord.getStatus() == null) {
@@ -42,27 +46,31 @@ public class HoverRecordServiceImpl {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    public HoverRecord updateHoverRecord(HoverRecord hoverRecord, int id){
-        Optional<HoverRecord> existingHoverRecord = hoverRecordRepository.findById(id);
-        if(existingHoverRecord.isPresent()){
-            HoverRecord originalHoverRecord = existingHoverRecord.get();
-            originalHoverRecord.setAsset(hoverRecord.getAsset());
-            originalHoverRecord.setNewOwner(hoverRecord.getNewOwner());
-            originalHoverRecord.setPreviousOwner(hoverRecord.getPreviousOwner());
-            originalHoverRecord.setHoverDate(hoverRecord.getHoverDate());
-            hoverRecordRepository.save(originalHoverRecord);
+    @Override
+    public ResponseEntity<HoverRecord> updateHoverRecord(List<HoverRecord> hoverRecords, int id){
+        for(HoverRecord hoverRecord : hoverRecords) {
+            Optional<HoverRecord> existingHoverRecord = hoverRecordRepository.findById(id);
+            if(existingHoverRecord.isPresent()){
+                HoverRecord originalHoverRecord = existingHoverRecord.get();
+                originalHoverRecord.setAsset(hoverRecord.getAsset());
+                originalHoverRecord.setNewOwner(hoverRecord.getNewOwner());
+                originalHoverRecord.setPreviousOwner(hoverRecord.getPreviousOwner());
+                originalHoverRecord.setHoverDate(hoverRecord.getHoverDate());
+                hoverRecordRepository.save(originalHoverRecord);
+            }
+
         }
-        return hoverRecord;
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public HoverRecord deleteHoverRecord(int id){
+    @Override
+    public void deleteHoverRecord(int id){
         Optional<HoverRecord> existingHoverRecord = hoverRecordRepository.findById(id);
         if (existingHoverRecord.isPresent()) {
             HoverRecord originalHoverRecord = existingHoverRecord.get();
             originalHoverRecord.setStatus(Status.UNAVAILABLE);
-            return hoverRecordRepository.save(originalHoverRecord);
-        }else {
-            return null;
+             hoverRecordRepository.save(originalHoverRecord);
         }
     }
 
