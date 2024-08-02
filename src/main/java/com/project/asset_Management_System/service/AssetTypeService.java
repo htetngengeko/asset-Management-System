@@ -13,9 +13,9 @@ public interface AssetTypeService {
     ResponseEntity<AssetType> getAssetTypeById(int id);
 
     @Transactional
-    ResponseEntity<AssetType> createAssetTypes(List<AssetType> assetTypes);
+    ResponseEntity<String> createAssetTypes(List<AssetType> assetTypes);
 
-    ResponseEntity<AssetType> updateAssetType(List<AssetType>assetTypes, int id);
+    ResponseEntity<String> updateAssetType(List<AssetType>assetTypes, int id);
 
-    void deleteAssetType(int id);
+    ResponseEntity<String> deleteAssetType(int id);
 }

@@ -28,8 +28,8 @@ public class HoverRecord {
     @NotNull(message = "New owner name can't be null")
     private String newOwner;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @NotNull
+    private boolean isDeleted = Boolean.FALSE;
 
     public int getId() {
         return id;
@@ -71,11 +71,12 @@ public class HoverRecord {
         this.newOwner = newOwner;
     }
 
-    public Status getStatus() {
-        return status;
+    @NotNull
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setDeleted(@NotNull boolean deleted) {
+        isDeleted = deleted;
     }
 }

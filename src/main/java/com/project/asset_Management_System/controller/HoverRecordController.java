@@ -26,17 +26,17 @@ public class HoverRecordController {
     }
 
     @PostMapping("/hover-records")
-    public ResponseEntity<HoverRecord> createHoverRecord(@Valid @RequestBody List<HoverRecord> hoverRecords) {
+    public ResponseEntity<String> createHoverRecord(@Valid @RequestBody List<HoverRecord> hoverRecords) {
         return hoverRecordServiceImpl.createHoverRecord(hoverRecords);
     }
 
     @PutMapping("/hover-records/{id}")
-    public ResponseEntity<HoverRecord> updateHoverRecord(@Valid @RequestBody List<HoverRecord> HoverRecords, @PathVariable int id) {
+    public ResponseEntity<String> updateHoverRecord(@Valid @RequestBody List<HoverRecord> HoverRecords, @PathVariable int id) {
         return hoverRecordServiceImpl.updateHoverRecord(HoverRecords, id);
     }
 
     @DeleteMapping("/hover-records/{id}")
-    public void deleteHoverRecord(@PathVariable int id) {
-        hoverRecordServiceImpl.deleteHoverRecord(id);
+    public ResponseEntity<String> deleteHoverRecord(@PathVariable int id) {
+        return hoverRecordServiceImpl.deleteHoverRecord(id);
     }
 }

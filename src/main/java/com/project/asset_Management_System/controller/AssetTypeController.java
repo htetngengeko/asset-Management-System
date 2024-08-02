@@ -25,18 +25,18 @@ public class AssetTypeController {
     }
 
     @PostMapping("/asset-types")
-    public ResponseEntity<AssetType> createAssetType(@Valid @RequestBody List<AssetType> assetType) {
+    public ResponseEntity<String> createAssetType(@Valid @RequestBody List<AssetType> assetType) {
         return assetTypeServiceImpl.createAssetTypes(assetType);
     }
 
     @PutMapping("/asset-types/{id}")
-    public ResponseEntity<AssetType> updateAssetType(@Valid @RequestBody List<AssetType> assetTypes, @PathVariable int id) {
+    public ResponseEntity<String> updateAssetType(@Valid @RequestBody List<AssetType> assetTypes, @PathVariable int id) {
         return assetTypeServiceImpl.updateAssetType(assetTypes, id);
     }
 
     @DeleteMapping("/asset-types/{id}")
-    public void deleteAssetType(@PathVariable int id) {
-         assetTypeServiceImpl.deleteAssetType(id);
+    public ResponseEntity<String> deleteAssetType(@PathVariable int id) {
+         return assetTypeServiceImpl.deleteAssetType(id);
     }
 
 }

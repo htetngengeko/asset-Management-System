@@ -32,6 +32,11 @@ public class AssetController {
 
     @RequestMapping(value = "/assets", method = RequestMethod.POST)
     public ResponseEntity<String> createAssets(@Valid @RequestParam("file") MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+
+        if (fileName == null || (!fileName.endsWith(".xlsx") || !fileName.contains(".xls"))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid file type. Only .xlsx files are supported.");
+        }
         try {
             assetServiceImpl.createAssets(file);
             return ResponseEntity.ok("Assets imported successfully.");
@@ -41,12 +46,12 @@ public class AssetController {
     }
 
     @RequestMapping(value = "/assets/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Asset> updateAsset(@Valid @RequestBody Asset asset, @PathVariable int id) {
+    public ResponseEntity<String> updateAsset(@Valid @RequestBody Asset asset, @PathVariable int id) {
         return assetServiceImpl.updateAsset(asset, id);
     }
 
     @RequestMapping(value = "/assets/{id}", method = RequestMethod.DELETE)
-    public void deleteAsset(@PathVariable int id) {
-        assetServiceImpl.deleteAsset(id);
+    public ResponseEntity<String> deleteAsset(@PathVariable int id) {
+        return assetServiceImpl.deleteAsset(id);
     }
 }

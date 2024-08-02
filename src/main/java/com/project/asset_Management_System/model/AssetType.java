@@ -13,8 +13,8 @@ public class AssetType {
     @NotNull(message = "Name can't be null")
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    @NotNull
+    private boolean isDeleted = Boolean.FALSE;
 
     public int getId() {
         return id;
@@ -32,11 +32,12 @@ public class AssetType {
         this.name = name;
     }
 
-    public Status getStatus() {
-        return status;
+    @NotNull
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setDeleted(@NotNull boolean deleted) {
+        isDeleted = deleted;
     }
 }

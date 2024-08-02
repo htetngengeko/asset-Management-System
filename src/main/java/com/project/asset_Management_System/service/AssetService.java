@@ -15,9 +15,9 @@ public interface AssetService {
     ResponseEntity<Asset> getAssetById(int id);
 
     @Transactional
-    ResponseEntity<Asset> createAssets(MultipartFile file) throws IOException;
+    ResponseEntity<String> createAssets(MultipartFile file) throws IOException;
 
-    ResponseEntity<Asset> updateAsset(Asset asset, int id);
+    ResponseEntity<String> updateAsset(Asset asset, int id);
 
-    void deleteAsset(int id);
+    ResponseEntity<String> deleteAsset(int id);
 }

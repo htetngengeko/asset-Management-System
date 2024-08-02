@@ -32,22 +32,19 @@ public class HoverRecordServiceImpl implements HoverRecordService {
     }
 
     @Override
-    public ResponseEntity<HoverRecord> createHoverRecord(List<HoverRecord> hoverRecords){
+    public ResponseEntity<String> createHoverRecord(List<HoverRecord> hoverRecords){
         for(HoverRecord hoverRecord : hoverRecords) {
-            if(hoverRecord.getStatus() == null) {
-                hoverRecord.setStatus(Status.AVAILABLE);
-            }
             Optional<Asset> asset = assetRepository.findById(hoverRecord.getAsset().getId());
             if(asset.isPresent()) {
                 hoverRecord.setAsset(asset.get());
                 hoverRecordRepository.save(hoverRecord);
             }
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Successfully created");
     }
 
     @Override
-    public ResponseEntity<HoverRecord> updateHoverRecord(List<HoverRecord> hoverRecords, int id){
+    public ResponseEntity<String > updateHoverRecord(List<HoverRecord> hoverRecords, int id){
         for(HoverRecord hoverRecord : hoverRecords) {
             Optional<HoverRecord> existingHoverRecord = hoverRecordRepository.findById(id);
             if(existingHoverRecord.isPresent()){
@@ -61,17 +58,18 @@ public class HoverRecordServiceImpl implements HoverRecordService {
 
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Updated successfully.");
     }
 
     @Override
-    public void deleteHoverRecord(int id){
+    public ResponseEntity<String> deleteHoverRecord(int id){
         Optional<HoverRecord> existingHoverRecord = hoverRecordRepository.findById(id);
         if (existingHoverRecord.isPresent()) {
             HoverRecord originalHoverRecord = existingHoverRecord.get();
-            originalHoverRecord.setStatus(Status.UNAVAILABLE);
+            originalHoverRecord.setDeleted(Boolean.TRUE);
              hoverRecordRepository.save(originalHoverRecord);
         }
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted successfully.");
     }
 
 }

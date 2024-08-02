@@ -25,7 +25,11 @@ public class Asset {
     private String name;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private Status status;
+
+    @NotNull
+    private boolean isDeleted = Boolean.FALSE;
 
     public int getId() {
         return id;
@@ -39,7 +43,7 @@ public class Asset {
         return assetType;
     }
 
-    public void setAssetType(AssetType assetType) {
+    public void setAssetType(@NotNull AssetType assetType) {
         this.assetType = assetType;
     }
 
@@ -51,11 +55,11 @@ public class Asset {
         return serial_number;
     }
 
-    public void setSerial_number(String serialNumber) {
+    public void setSerial_number(@NotNull String serialNumber) {
         this.serial_number = serialNumber;
     }
 
-    public void setName(String name) {
+    public void setName(@NotNull String name) {
         this.name = name;
     }
 
@@ -63,7 +67,16 @@ public class Asset {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(@NotNull Status status) {
         this.status = status;
+    }
+
+    @NotNull
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(@NotNull boolean deleted) {
+        isDeleted = deleted;
     }
 }

@@ -13,9 +13,9 @@ public interface HoverRecordService {
     ResponseEntity<HoverRecord> getHoverRecordById(int id);
 
     @Transactional
-    ResponseEntity<HoverRecord> createHoverRecord(List<HoverRecord> hoverRecords);
+    ResponseEntity<String> createHoverRecord(List<HoverRecord> hoverRecords);
 
-    ResponseEntity<HoverRecord> updateHoverRecord(List<HoverRecord> HoverRecord, int id);
+    ResponseEntity<String> updateHoverRecord(List<HoverRecord> HoverRecord, int id);
 
-    void deleteHoverRecord(int id);
+    ResponseEntity<String> deleteHoverRecord(int id);
 }

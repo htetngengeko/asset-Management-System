@@ -38,19 +38,14 @@ public class AssetTypeServiceImpl implements AssetTypeService{
 
     @Transactional
     @Override
-    public ResponseEntity<AssetType> createAssetTypes(List<AssetType> assetTypes) {
-        for(AssetType assetType : assetTypes) {
-            if(assetType.getStatus() == null){
-                assetType.setStatus(Status.AVAILABLE);
-                assetTypeRepository.save(assetType);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<String> createAssetTypes(List<AssetType> assetTypes) {
+        assetTypeRepository.saveAll(assetTypes);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created.");
     }
 
 
     @Override
-    public ResponseEntity<AssetType> updateAssetType(List<AssetType> assetTypes, int id) {
+    public ResponseEntity<String> updateAssetType(List<AssetType> assetTypes, int id) {
         for(AssetType assetType : assetTypes) {
             Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
             if (existingAssetType.isPresent()) {
@@ -60,17 +55,18 @@ public class AssetTypeServiceImpl implements AssetTypeService{
             }
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Updated successfully.");
     }
 
     @Override
-    public void deleteAssetType(int id) {
+    public ResponseEntity<String> deleteAssetType(int id) {
         Optional<AssetType> existingAssetType = assetTypeRepository.findById(id);
         if (existingAssetType.isPresent()) {
             AssetType originalAssetType = existingAssetType.get();
-            originalAssetType.setStatus(Status.UNAVAILABLE);
+            originalAssetType.setDeleted(Boolean.TRUE);
             assetTypeRepository.save(originalAssetType);
         }
+        return ResponseEntity.status(HttpStatus.OK).body("Deleted successfully.");
 
     }
 }
