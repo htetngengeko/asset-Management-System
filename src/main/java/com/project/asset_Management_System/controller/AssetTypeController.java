@@ -1,7 +1,7 @@
 package com.project.asset_Management_System.controller;
 
 import com.project.asset_Management_System.model.AssetType;
-import com.project.asset_Management_System.service.AssetTypeServiceImpl;
+import com.project.asset_Management_System.service.implmentations.AssetTypeServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +30,8 @@ public class AssetTypeController {
     }
 
     @PutMapping("/asset-types/{id}")
-    public ResponseEntity<String> updateAssetType(@Valid @RequestBody List<AssetType> assetTypes, @PathVariable int id) {
-        return assetTypeServiceImpl.updateAssetType(assetTypes, id);
+    public ResponseEntity<String> updateAssetType(@Valid @RequestBody AssetType assetType, @PathVariable int id) {
+        return assetTypeServiceImpl.updateAssetType(assetType, id);
     }
 
     @DeleteMapping("/asset-types/{id}")

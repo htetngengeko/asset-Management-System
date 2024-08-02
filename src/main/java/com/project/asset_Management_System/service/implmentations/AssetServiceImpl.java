@@ -1,14 +1,15 @@
-package com.project.asset_Management_System.service;
+package com.project.asset_Management_System.service.implmentations;
 
 import com.project.asset_Management_System.enums.Status;
 import com.project.asset_Management_System.model.Asset;
+import com.project.asset_Management_System.model.AssetType;
 import com.project.asset_Management_System.repository.AssetRepository;
 import com.project.asset_Management_System.repository.AssetTypeRepository;
+import com.project.asset_Management_System.service.interfaces.AssetService;
 import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,9 +36,32 @@ public class AssetServiceImpl implements AssetService {
         return assetRepository.findById(id).map(asset -> new ResponseEntity<>(asset, HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @Override
+    public ResponseEntity<String> createAssets(List<Asset>assets){
+        List<Asset> newAssets = new ArrayList<>();
+        for (Asset asset : assets) {
+            Optional<AssetType> assetType = assetTypeRepository.findById(asset.getAssetType().getId());
+            try{
+                if (assetType.isPresent()) {
+                    asset.setAssetType(assetType.get());
+                    newAssets.add(asset);
+                }
+                assetRepository.saveAll(newAssets);
+                return ResponseEntity.status(HttpStatus.CREATED).body("Assets created successfully.");
+
+            }catch (Exception e){
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Error while creating assets.");
+            }
+
+        }
+        return null;
+    }
+
+
+
     @Transactional
     @Override
-    public ResponseEntity<String> createAssets(MultipartFile file) throws IOException {
+    public ResponseEntity<String> importAssets(MultipartFile file) throws IOException {
         List<Asset> assets = new ArrayList<>();
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0);
@@ -66,33 +90,38 @@ public class AssetServiceImpl implements AssetService {
                 assets.add(asset);
             }
             assetRepository.saveAll(assets);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Assets created successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Assets imported successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to import assets.");
         }
     }
 
-    public Asset saveAsset(Asset asset) {
-        return assetRepository.save(asset);
-    }
-
     @Override
     public ResponseEntity<String> updateAsset(Asset asset, int id) {
-        Optional<Asset> existAsset = assetRepository.findById(id);
-        if(existAsset.isPresent()) {
-            Asset originalAsset = existAsset.get();
-            originalAsset.setName(asset.getName());
-            originalAsset.setStatus(asset.getStatus());
-            originalAsset.setSerial_number(asset.getSerial_number());
-            assetRepository.save(originalAsset);
-        } return ResponseEntity.status(HttpStatus.ACCEPTED).body("Updated successfully.");
+        try{
+            Optional<Asset> existAsset = assetRepository.findById(id);
+            if(existAsset.isPresent()) {
+                Asset originalAsset = existAsset.get();
+                originalAsset.setName(asset.getName());
+                originalAsset.setStatus(asset.getStatus());
+                originalAsset.setSerial_number(asset.getSerial_number());
+                assetRepository.save(originalAsset);
+            } return ResponseEntity.status(HttpStatus.ACCEPTED).body("Updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update asset.");
+        }
+
     }
 
     public ResponseEntity<String> deleteAsset(int id) {
-        if(assetRepository.findById(id).isPresent()) {
-            Asset originalAsset = assetRepository.findById(id).get();
-            originalAsset.setDeleted(Boolean.TRUE);
-        }return ResponseEntity.status(HttpStatus.OK).body("Deleted successfully.");
+        try {
+            if(assetRepository.findById(id).isPresent()) {
+                Asset originalAsset = assetRepository.findById(id).get();
+                originalAsset.setDeleted(Boolean.TRUE);
+            }return ResponseEntity.status(HttpStatus.OK).body("Deleted successfully.");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete asset.");
+        }
+
     }
 }

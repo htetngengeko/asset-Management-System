@@ -1,6 +1,5 @@
-package com.project.asset_Management_System.service;
+package com.project.asset_Management_System.service.interfaces;
 
-import com.project.asset_Management_System.model.Asset;
 import com.project.asset_Management_System.model.HoverRecord;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ public interface HoverRecordService {
     @Transactional
     ResponseEntity<String> createHoverRecord(List<HoverRecord> hoverRecords);
 
-    ResponseEntity<String> updateHoverRecord(List<HoverRecord> HoverRecord, int id);
+    ResponseEntity<String> updateHoverRecord(HoverRecord HoverRecord, int id);
 
     ResponseEntity<String> deleteHoverRecord(int id);
 }

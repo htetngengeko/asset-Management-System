@@ -19,6 +19,7 @@ public class Asset {
     private AssetType assetType;
 
     @NotNull(message = "Serial Number can't be null")
+    @Column(unique = true)
     private String serial_number;
 
     @NotNull(message = "Name can't be null")

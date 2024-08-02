@@ -2,7 +2,7 @@ package com.project.asset_Management_System.controller;
 
 import com.project.asset_Management_System.model.Asset;
 import com.project.asset_Management_System.repository.AssetRepository;
-import com.project.asset_Management_System.service.AssetServiceImpl;
+import com.project.asset_Management_System.service.implmentations.AssetServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,14 +31,19 @@ public class AssetController {
     }
 
     @RequestMapping(value = "/assets", method = RequestMethod.POST)
-    public ResponseEntity<String> createAssets(@Valid @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> createAssets(@Valid @RequestBody List<Asset> assets) {
+        return assetServiceImpl.createAssets(assets);
+    }
+
+    @RequestMapping(value = "/assets/batch", method = RequestMethod.POST)
+    public ResponseEntity<String> importAssets(@Valid @RequestParam("file") MultipartFile file) {
         String fileName = file.getOriginalFilename();
 
         if (fileName == null || (!fileName.endsWith(".xlsx") || !fileName.contains(".xls"))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid file type. Only .xlsx files are supported.");
         }
         try {
-            assetServiceImpl.createAssets(file);
+            assetServiceImpl.importAssets(file);
             return ResponseEntity.ok("Assets imported successfully.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to import assets.");

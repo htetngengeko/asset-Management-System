@@ -1,4 +1,4 @@
-package com.project.asset_Management_System.service;
+package com.project.asset_Management_System.service.interfaces;
 
 import com.project.asset_Management_System.model.Asset;
 import jakarta.transaction.Transactional;
@@ -14,8 +14,10 @@ public interface AssetService {
 
     ResponseEntity<Asset> getAssetById(int id);
 
+    ResponseEntity<String> createAssets(List<Asset> assets) ;
+
     @Transactional
-    ResponseEntity<String> createAssets(MultipartFile file) throws IOException;
+    ResponseEntity<String> importAssets(MultipartFile file) throws IOException;
 
     ResponseEntity<String> updateAsset(Asset asset, int id);
 

@@ -1,6 +1,5 @@
-package com.project.asset_Management_System.service;
+package com.project.asset_Management_System.service.interfaces;
 
-import com.project.asset_Management_System.model.Asset;
 import com.project.asset_Management_System.model.AssetType;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ public interface AssetTypeService {
     @Transactional
     ResponseEntity<String> createAssetTypes(List<AssetType> assetTypes);
 
-    ResponseEntity<String> updateAssetType(List<AssetType>assetTypes, int id);
+    ResponseEntity<String> updateAssetType(AssetType assetType, int id);
 
     ResponseEntity<String> deleteAssetType(int id);
 }

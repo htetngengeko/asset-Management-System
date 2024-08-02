@@ -22,11 +22,17 @@ public class HoverRecord {
     @NotNull(message = "Date can't be null")
     private LocalDate hoverDate;
 
-    @NotNull(message = "Previous owner name can't be null")
-    private String previousOwner;
+    @ManyToOne
+    @JoinColumn(name = "previous_owner", nullable = false)
+    @JsonProperty("previous_owner")
+    @NotNull(message = "Previous owner can't be null")
+    private Employee previousOwner;
 
-    @NotNull(message = "New owner name can't be null")
-    private String newOwner;
+    @ManyToOne
+    @JoinColumn(name = "new_owner", nullable = false)
+    @JsonProperty("new_owner")
+    @NotNull(message = "New owner can't be null")
+    private Employee newOwner;
 
     @NotNull
     private boolean isDeleted = Boolean.FALSE;
@@ -39,35 +45,35 @@ public class HoverRecord {
         this.id = id;
     }
 
-    public Asset getAsset() {
+    public @NotNull(message = "Asset can't be null") Asset getAsset() {
         return asset;
     }
 
-    public void setAsset(Asset asset) {
+    public void setAsset(@NotNull(message = "Asset can't be null") Asset asset) {
         this.asset = asset;
     }
 
-    public LocalDate getHoverDate() {
+    public @NotNull(message = "Date can't be null") LocalDate getHoverDate() {
         return hoverDate;
     }
 
-    public void setHoverDate(LocalDate hoverDate) {
+    public void setHoverDate(@NotNull(message = "Date can't be null") LocalDate hoverDate) {
         this.hoverDate = hoverDate;
     }
 
-    public String getPreviousOwner() {
+    public @NotNull(message = "Previous owner can't be null") Employee getPreviousOwner() {
         return previousOwner;
     }
 
-    public void setPreviousOwner(String previousOwner) {
+    public void setPreviousOwner(@NotNull(message = "Previous owner can't be null") Employee previousOwner) {
         this.previousOwner = previousOwner;
     }
 
-    public String getNewOwner() {
+    public @NotNull(message = "New owner can't be null") Employee getNewOwner() {
         return newOwner;
     }
 
-    public void setNewOwner(String newOwner) {
+    public void setNewOwner(@NotNull(message = "New owner can't be null") Employee newOwner) {
         this.newOwner = newOwner;
     }
 
