@@ -43,7 +43,7 @@ public class HoverRecordServiceImpl implements HoverRecordService {
                 Optional<Employee> previousEmployee = employeeRepository.findByEmployeeCode(hoverRecord.getPreviousOwner().getEmployeeCode());
                 Optional<Employee> newEmployee = employeeRepository.findByEmployeeCode(hoverRecord.getNewOwner().getEmployeeCode());
 
-                if (asset.isPresent() || previousEmployee.isPresent() || newEmployee.isPresent()) {
+                if (asset.isPresent() && previousEmployee.isPresent() && newEmployee.isPresent()) {
                     hoverRecord.setAsset(asset.get());
                     hoverRecord.setPreviousOwner(previousEmployee.get());
                     hoverRecord.setNewOwner(newEmployee.get());
@@ -59,14 +59,20 @@ public class HoverRecordServiceImpl implements HoverRecordService {
     @Override
     public ResponseEntity<String > updateHoverRecord(HoverRecord hoverRecord, int id){
         try{
-            Optional<HoverRecord> existingHoverRecord = hoverRecordRepository.findById(id);
-            Optional<Employee> existingPreviousEmployee = employeeRepository.findByEmployeeCode(hoverRecord.getPreviousOwner().getEmployeeCode());
-            Optional<Employee> existingNewEmployee = employeeRepository.findByEmployeeCode(hoverRecord.getNewOwner().getEmployeeCode());
-            if(existingHoverRecord.isPresent()){
-                HoverRecord originalHoverRecord = existingHoverRecord.get();
-                originalHoverRecord.setAsset(hoverRecord.getAsset());
-                originalHoverRecord.setNewOwner(hoverRecord.getNewOwner()); //this could be error
-                originalHoverRecord.setPreviousOwner(hoverRecord.getPreviousOwner()); //this could be error
+            Optional<HoverRecord> existingHoverRecordOpt = hoverRecordRepository.findById(id);
+            Optional<Employee> existingPreviousEmployeeOpt = employeeRepository.findByEmployeeCode(hoverRecord.getPreviousOwner().getEmployeeCode());
+            Optional<Employee> existingNewEmployeeOpt = employeeRepository.findByEmployeeCode(hoverRecord.getNewOwner().getEmployeeCode());
+
+            if(existingHoverRecordOpt.isPresent() && existingPreviousEmployeeOpt.isPresent() &&  existingNewEmployeeOpt.isPresent()){
+
+                HoverRecord originalHoverRecord = existingHoverRecordOpt.get();
+                Asset existingAsset = originalHoverRecord.getAsset();
+                Employee existingPreviousEmployee = existingPreviousEmployeeOpt.get();
+                Employee existingNewEmployee = existingNewEmployeeOpt.get();
+
+                originalHoverRecord.setAsset(existingAsset);
+                originalHoverRecord.setNewOwner(existingNewEmployee);
+                originalHoverRecord.setPreviousOwner(existingPreviousEmployee);
                 originalHoverRecord.setHoverDate(hoverRecord.getHoverDate());
                 hoverRecordRepository.save(originalHoverRecord);
             }
